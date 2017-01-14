@@ -13,8 +13,8 @@ server.listen(3003, () => {
     console.log('Server listening on: http://localhost:%s', 3003);
 });
 
-setTimeout(function() {
-    var options = {
+setTimeout(() => {
+    let options = {
         hostname: 'middleware',
         port: 3001,
         path: '/telegram/register',
@@ -24,14 +24,14 @@ setTimeout(function() {
         }
     };
 
-    var req = http.request(options, function(res) {
+    let req = http.request(options, (res) => {
         res.setEncoding('utf8');
-        res.on('data', function(body) {
+        res.on('data', (body) => {
             console.log(body);
         });
     });
 
-    req.on('error', function(e) {
+    req.on('error', (e) => {
         console.log('problem with request: ' + e.message);
     });
 

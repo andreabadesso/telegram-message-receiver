@@ -20,6 +20,10 @@
   "author": "21k",
   "license": "ISC",
   "dependencies": {
+    "bluebird": "^3.4.7",
+    "bunyan": "^1.8.5",
+    "knex": "^0.12.6",
+    "pg": "^6.1.2"
   },
   "devDependencies": {
     "bunyan": "^1.8.1"
