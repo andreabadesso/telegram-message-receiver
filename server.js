@@ -1,18 +1,28 @@
 'use strict';
 
 const http = require('http'),
-    fs = require('fs');
+    fs = require('fs'),
+    express = require('express'),
+    app = express(),
+    server = http.Server(app),
+    bodyParser = require('body-parser'),
+    ExternalInterface = require('./controllers/ExternalInterface');
 
-function requestHandler(req, res) {
-    console.log(req, res);
-}
+let apiRoutes = express.Router();
+let externalInterface = new ExternalInterface(apiRoutes);
 
-const server = http.createServer(requestHandler);
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
+app.use(bodyParser.json());
 
-server.listen(3003, () => {
-    console.log('Server listening on: http://localhost:%s', 3003);
-});
+app.use(apiRoutes);
 
+externalInterface.registerRoutes();
+
+app.listen(3003);
+
+// Register to middleware
 setTimeout(() => {
     let options = {
         hostname: 'middleware',

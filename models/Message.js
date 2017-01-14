@@ -11,7 +11,7 @@ const logger = bunyan.createLogger({
 module.exports = class Message {
 
     constructor(connection) {
-        this.tableName = 'message';
+        this.tableName = 'group_messages';
         this.knex = require('knex')({
             client: 'pg',
             connection: connection
@@ -19,6 +19,7 @@ module.exports = class Message {
     }
 
     createMessage(text, date, from_name, group_id, metadata) {
+
         return this.knex(this.tableName)
                 .insert({
                     text: text,
@@ -35,7 +36,7 @@ module.exports = class Message {
             .createTableIfNotExists(this.tableName, table => {
                 table.increments();
                 table.string('text');
-                table.string('date');
+                table.datetime('date');
                 table.string('from_name');
                 table.string('group_id');
                 table.specificType('metadata', 'json');
