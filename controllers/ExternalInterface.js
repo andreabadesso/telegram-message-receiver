@@ -1,6 +1,7 @@
 'use strict';
 
 const Message = require('../models/Message');
+const http = require('http');
 
 const connection = {
     host : process.env.PG_HOST,
@@ -20,6 +21,35 @@ class ExternalInterface {
         this.server = server;
 
         this.registerRoutes();
+    }
+
+    registerOnMiddleware() {
+        let options = {
+            hostname: 'middleware',
+            port: 3001,
+            path: '/telegram/register',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        };
+
+        let req = http.request(options, (res) => {
+            res.setEncoding('utf8');
+            res.on('data', (body) => {
+                console.log(body);
+            });
+        });
+
+        req.on('error', (e) => {
+            console.log('problem with request: ' + e.message);
+        });
+
+        req.write(JSON.stringify({
+            url: 'http://receiver:3003/'
+        }));
+
+        req.end();
     }
 
     handleNewMessage(req, res, next) {
