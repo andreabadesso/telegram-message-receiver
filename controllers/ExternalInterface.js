@@ -2,6 +2,8 @@
 
 const Message = require('../models/Message');
 const http = require('http');
+const RECEIVER_URL = process.env.RECEIVER_URL;
+const MIDDLEWARE_PORT = process.env.MIDDLEWARE_PORT;
 
 const connection = {
     host : process.env.PG_HOST,
@@ -26,7 +28,7 @@ class ExternalInterface {
     registerOnMiddleware() {
         let options = {
             hostname: 'middleware',
-            port: 3001,
+            port: MIDDLEWARE_PORT,
             path: '/telegram/register',
             method: 'POST',
             headers: {
@@ -46,7 +48,7 @@ class ExternalInterface {
         });
 
         req.write(JSON.stringify({
-            url: 'http://receiver:3003/'
+            url: RECEIVER_URL
         }));
 
         req.end();
@@ -72,7 +74,7 @@ class ExternalInterface {
     }
 
     registerRoutes() {
-        this.server.post('/grupos/:id/mensagens', this.handleNewMessage.bind(this));
+        this.server.post('/groups/:id/messages', this.handleNewMessage.bind(this));
     }
 
 }
