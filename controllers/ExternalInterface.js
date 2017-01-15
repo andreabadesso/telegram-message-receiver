@@ -6,11 +6,11 @@ const RECEIVER_URL = process.env.RECEIVER_URL;
 const MIDDLEWARE_PORT = process.env.MIDDLEWARE_PORT;
 
 const connection = {
-    host : process.env.PG_HOST,
+    host: process.env.PG_HOST,
     port: process.env.PG_PORT,
-    user : process.env.PG_USER,
-    password : process.env.PG_PASS,
-    database : process.env.PG_DB
+    user: process.env.PG_USER,
+    password: process.env.PG_PASS,
+    database: process.env.PG_DB
 };
 
 let message = new Message(connection);
@@ -54,15 +54,29 @@ class ExternalInterface {
         req.end();
     }
 
+    _cleanName(firstName, lastName) {
+        let name = firstName;
+        if (lastName) {
+            name += ` ${lastName}`;
+        }
+
+        return name;
+    }
+
     handleNewMessage(req, res, next) {
         console.log('Handling message ..');
         let m = req.body;
 
-        message.createMessage(m.text,
-                              m.time,
-                              m.from.first_name,
-                              m.id,
-                              JSON.stringify(m))
+        message.createMessage(
+                m.text,
+                m.time,
+                this._cleanName(m.from.first_name, m.from.last_name),
+                m.id,
+                JSON.stringify(m),
+                m.title,
+                m.from.userId,
+                m.from.username
+            )
             .then(_message => {
                 res.send({
                     status: 200,
