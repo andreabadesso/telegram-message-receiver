@@ -34,6 +34,38 @@ module.exports = class Message {
                 .returning('*');
     }
 
+    findGroupMessages(groupId, page) {
+        let messagesPerPage = 30;
+        let offset          = 30 * page;
+
+        let queryParams = {
+            limit : messagesPerPage,
+            offset: offset
+        };
+
+        if (offset <= 0) {
+            delete queryParams.offset;
+        }
+
+        let query = `
+            SELECT
+            *
+            FROM "group_messages"
+
+            WHERE group_id = '${groupId}'
+
+            ORDER BY date DESC
+
+            LIMIT ${queryParams.limit}
+        `;
+
+        if (offset > 0) {
+            query += `OFFSET ${queryParams.offset};`;
+        }
+
+        return this.knex.raw(query);
+    }
+
     createTable() {
         return this.knex.schema
             .createTableIfNotExists(this.tableName, table => {

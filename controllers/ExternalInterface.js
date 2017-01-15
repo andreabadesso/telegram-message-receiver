@@ -87,8 +87,27 @@ class ExternalInterface {
             });
     }
 
+    findGroupMessages(req, res, next) {
+        let groupId = req.params.id;
+        let page = req.query.page;
+
+        return message.findGroupMessages(groupId, page)
+            .then(messages => {
+                return res.send({
+                    status: 200,
+                    messages: messages.rows
+                });
+            }, err => {
+                console.log(err);
+                return res.send({
+                    status: 500
+                });
+            });
+    }
+
     registerRoutes() {
         this.server.post('/groups/:id/messages', this.handleNewMessage.bind(this));
+        this.server.get('/groups/:id/messages', this.findGroupMessages.bind(this));
     }
 
 }
