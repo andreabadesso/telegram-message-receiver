@@ -8,6 +8,8 @@ const http = require('http'),
     bodyParser = require('body-parser'),
     ExternalInterface = require('./controllers/ExternalInterface');
 
+const RECEIVER_PORT=process.env.RECEIVER_PORT;
+
 let apiRoutes = express.Router();
 let externalInterface = new ExternalInterface(apiRoutes);
 
@@ -20,4 +22,4 @@ app.use(apiRoutes);
 externalInterface.registerRoutes();
 externalInterface.registerOnMiddleware();
 
-app.listen(3003);
+app.listen(RECEIVER_PORT);
