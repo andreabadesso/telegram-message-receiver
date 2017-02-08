@@ -105,9 +105,25 @@ class ExternalInterface {
             });
     }
 
+    findGroups(req, res, next) {
+        return message.findGroups()
+                .then(groups => {
+                return res.send({
+                    status: 200,
+                    groups: groups.rows
+                });
+        }, err => {
+            console.log(err);
+            return res.send({
+                status: 500
+            });
+        });
+    }
+
     registerRoutes() {
         this.server.post('/groups/:id/messages', this.handleNewMessage.bind(this));
         this.server.get('/groups/:id/messages', this.findGroupMessages.bind(this));
+        this.server.get('/groups', this.findGroups.bind(this));
     }
 
 }

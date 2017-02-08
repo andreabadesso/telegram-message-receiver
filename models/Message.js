@@ -66,6 +66,18 @@ module.exports = class Message {
         return this.knex.raw(query);
     }
 
+    findGroups(){
+        let query = `
+            SELECT DISTINCT group_id, group_name
+            
+            FROM "group_messages"
+
+            ORDER BY group_name DESC
+        `;
+
+        return this.knex.raw(query);
+    }
+
     createTable() {
         return this.knex.schema
             .createTableIfNotExists(this.tableName, table => {
