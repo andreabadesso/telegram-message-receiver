@@ -3,11 +3,11 @@
 const Message = require('./models/Message');
 
 const connection = {
-    host : '127.0.0.1',
-    user : 'postgres',
-    port: 32768,
-    password : 'docker',
-    database : 'keeptrack'
+    host: '172.18.0.1',
+    user: 'postgres',
+    port: 5432,
+    password: '',
+    database: 'trak'
 };
 
 let message = new Message(connection);
